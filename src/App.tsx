@@ -6,6 +6,7 @@ import { getDatabase, ref, onValue, off, set } from "firebase/database";
 import { useUser, useFirebaseApp } from './firebase'
 import { Input } from './Input';
 import { Start } from './Start';
+import { Timer } from './Timer';
 import { Trigger } from './Trigger';
 import { Presence } from './Presence';
 import { WhoIsHere } from './WhoIsHere';
@@ -22,6 +23,7 @@ function App() {
       <Input path={useCallback(user => `users/${user.uid}/name`, [])} placeholder="Name" />
       <input placeholder="Room" value={room} onChange={e => setRoom(e.target.value)} />
       <Start room={room} />
+      <Timer room={room} />
       <Trigger room={room} />
       <Presence room={room} />
 

@@ -17,6 +17,6 @@ export function Trigger({ room }: { room: string }) {
   }
 
   return <>
-    <button disabled={!isInit} onClick={onClick}>End</button>
+    <button disabled={!isInit || end !== null} onClick={onClick}>End</button>
   </>
 }
