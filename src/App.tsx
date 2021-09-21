@@ -8,6 +8,7 @@ import { Input } from './Input';
 import { Start } from './Start';
 import { Timer } from './Timer';
 import { Trigger } from './Trigger';
+import { PersistTimeToBeat } from './PersistTimeToBeat';
 import { Presence } from './Presence';
 import { WhoIsHere } from './WhoIsHere';
 
@@ -17,6 +18,7 @@ function App() {
   const user = useUser()
   const app = useFirebaseApp()
   const [room, setRoom] = useState('')
+  const [timeToBeat, setTimeToBeat] = useState(0)
 
   return (
     <div className="App">
