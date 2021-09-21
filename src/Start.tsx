@@ -1,4 +1,5 @@
 import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { formatTime } from './formatTime';
 import { useRealtimeValue } from './useRealtimeValue';
 
 export function Start({ room }: { room: string }) {
@@ -7,7 +8,6 @@ export function Start({ room }: { room: string }) {
 
   const onClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     const time = (new Date()).getTime()
-    console.log({ serverTimeOffset })
     setStart(time + serverTimeOffset!)
   }
 
@@ -45,29 +45,4 @@ const Timer = ({ start, offset }: { start: number | null, offset: number | null 
   }, [start])
 
   return <div style={{ fontVariantNumeric: 'tabular-nums' }} ref={ref} />
-}
-
-const formatTime = (ms: number) => {
-  let hundredths = Math.round(ms / 10)
-  let seconds = hundredths / 100
-  hundredths = (seconds - Math.floor(seconds)) * 100
-  seconds = Math.floor(seconds)
-  let minutes = seconds / 60
-  seconds = (minutes - Math.floor(minutes)) * 60
-  minutes = Math.floor(minutes)
-  let hours = minutes / 60
-  minutes = (hours - Math.floor(hours)) * 60
-  hours = Math.floor(hours)
-  const strs = [
-    hours ? hours.toFixed(0) : null,
-    minutes ? minutes.toFixed(0).padStart(2, '0') : null,
-    seconds ? seconds.toFixed(0).padStart(2, '0') : '00'
-  ]
-  let nonEmpty = []
-  for (let i of strs) {
-    if (i || nonEmpty.length) {
-      nonEmpty.push(i)
-    }
-  }
-  return nonEmpty.join(':') + '.' + hundredths.toFixed(0).padStart(2, '0')
 }
