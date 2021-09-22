@@ -1,0 +1,5 @@
+.name {
+  background: var(--cta-background);
+  color: var(--cta-text);
+  text-align: center;
+}

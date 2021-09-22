@@ -5,5 +5,5 @@ export function Name() {
   const p = useProvider()
   console.log(p)
 
-  return <div>{p.name}</div>
+  return <div className='name'>{p.name}</div>
 }
