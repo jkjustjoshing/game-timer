@@ -13,7 +13,6 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
 
   const onChange = (val: T | null) => {
     if (nameRef.current) {
-      console.log(path, 'setting val', val)
       set(nameRef.current, val)
       setVal(val)
     }
@@ -25,11 +24,9 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
     }
 
     const ppath = typeof path === 'function' ? path(user) : path
-    console.log('effecting', ppath)
     const database = getDatabase(app)
     nameRef.current = ref(database, typeof path === 'function' ? path(user) : path)
     onValue(nameRef.current, s => {
-      console.log('onValue', s.val())
       setVal(s.val())
       setIsInit(true)
     })
@@ -37,7 +34,6 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
     return () => {
       if (nameRef.current) {
         off(nameRef.current)
-        console.log('offValue', ppath)
         setIsInit(false)
         setVal(null)
       }

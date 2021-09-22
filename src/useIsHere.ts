@@ -1,13 +1,13 @@
 import { User } from 'firebase/auth';
 import { DatabaseReference, getDatabase, off, onValue, ref, child, get } from 'firebase/database';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFirebaseApp, useUser } from './firebase';
 
 export const useIsHere = (room: string | null) => {
   const app = useFirebaseApp()
   const user = useUser()
-  const [users, setUsers] = useState<{ name: string, uid: string }[]>([])
-  const [ends, setEnds] = useState<{ [uid: string]: number }>({})
+  const [users, setUsers] = useState<{ name: string, uid: string }[] | null>(null)
+  const [ends, setEnds] = useState<Record<string, number | undefined> | null>(null)
 
   useEffect(() => {
     if (!user || room === null) {
@@ -36,12 +36,20 @@ export const useIsHere = (room: string | null) => {
       if (presenceRef) {
         off(presenceRef)
         off(endRef)
-        setUsers([])
-        setEnds({})
+        setUsers(null)
+        setEnds(null)
       }
     }
 
   }, [user, room])
 
-  return [users, ends] as const
+  return useMemo(() => {
+    if (!users || !ends) {
+      return []
+    }
+
+    return users.map(user => {
+      return { ...user, end: ends[user.uid] ?? null }
+    })
+  }, [users, ends])
 }

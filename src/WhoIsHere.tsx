@@ -1,10 +1,11 @@
 import React from 'react'
 import { formatTime } from './formatTime';
+import { getMinUser } from './getMinUser';
 import { useIsHere } from './useIsHere';
 import { useRealtimeValue, useClearRealtimeValue } from './useRealtimeValue';
 
-export function WhoIsHere({ room, admin }: { room: string, admin?: boolean }) {
-  const [users, ends] = useIsHere(room)
+export function WhoIsHere({ room, admin, className }: { room: string, admin?: boolean, className: string }) {
+  const users = useIsHere(room)
   const [start, setStart, isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
   const [, setTimeToBeat, isTTBInit] = useRealtimeValue<number>(room ? `rooms/${room}/timeToBeat` : null)
   const clearRoomEnd = useClearRealtimeValue(room ? `rooms/${room}/end` : null)
@@ -14,52 +15,51 @@ export function WhoIsHere({ room, admin }: { room: string, admin?: boolean }) {
   // }
 
   type U = (typeof users)[0]
-  const minUser = users.reduce((u1: U | null, u2: U | null): U | null => {
-    const e1 = u1 && ends[u1.uid]
-    const e2 = u2 && ends[u2.uid]
-
-    if (!e1) {
-      if (e2) {
-        return u2
-      } else {
-        return null
-      }
-    }
-    if (!e2) {
-      if (e1) {
-        return u1
-      } else {
-        return null
-      }
-    }
-    if (ends[u1.uid] < ends[u2.uid]) {
-      return u1
-    } else if (ends[u1.uid] > ends[u2.uid]) {
-      return u2
-    } else {
-      throw new Error('TIE! ' + u1.name + ', ' + u2.name)
-    }
-  }, null)
+  const minUser = getMinUser(users)
 
   const persistTimeToBeat = () => {
-    if (minUser && start !== null) {
-      setTimeToBeat(ends[minUser.uid] - start)
+    if (minUser && minUser.end !== null && start !== null) {
+      setTimeToBeat(minUser.end - start)
       setStart(null)
       clearRoomEnd()
     }
   }
 
-  return <ul>
-    {
-      users.map((u, i) => {
-        const isMin = (u === minUser)
-        return <li key={i}>
-          {u.name}{ends[u.uid] && start !== null ? `- ${formatTime(ends[u.uid] - start)}` : ''}
-          {isMin && admin && (
-            <button onClick={persistTimeToBeat}>PersistTimeToBeat</button>
-          )}
-        </li>
-      })
+  const sortedUsers = [...users].sort((a, b) => {
+    const aEnd = a.end
+    const bEnd = b.end
+    if (aEnd && bEnd) {
+      return aEnd - bEnd
     }
-  </ul>
+    if (aEnd) {
+      return -1
+    } else if (bEnd) {
+      return 1
+    } else {
+      // Neither finished - alphabetical order
+      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+    }
+  })
+
+  return <div className={className}>
+    <h2>Competitors</h2>
+    <ul>
+      {
+        sortedUsers.map((u, i) => {
+          const isMin = (u === minUser)
+          return <li key={i}>
+            {u.name}
+            {u.end && start !== null ? (
+                ` - ${formatTime(u.end - start)} seconds`
+              )
+              : ''
+            }
+            {isMin && admin && (
+              <button onClick={persistTimeToBeat}>PersistTimeToBeat</button>
+            )}
+          </li>
+        })
+      }
+    </ul>
+  </div>
 }

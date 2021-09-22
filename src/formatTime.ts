@@ -20,5 +20,7 @@ export const formatTime = (ms: number) => {
       nonEmpty.push(i)
     }
   }
+
+  nonEmpty[0] = Number(nonEmpty[0]).toFixed(0) // get rid of leading 0 on largest number
   return nonEmpty.join(':') + '.' + hundredths.toFixed(0).padStart(2, '0')
 }

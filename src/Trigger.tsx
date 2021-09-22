@@ -2,6 +2,7 @@ import { User } from 'firebase/auth';
 import React, { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import { useProvider } from './context';
 import { useRealtimeValue } from './useRealtimeValue';
+import styles from './Trigger.module.css'
 
 export function Trigger() {
   const { room, roomData, serverTimeOffset } = useProvider()
@@ -10,7 +11,7 @@ export function Trigger() {
   const [end, setEnd, isInit] = useRealtimeValue<number>(room ? path : null)
 
   if (roomData.start == null) {
-    return null
+    return <div className={styles.ready + ' button'}>Ready...</div>
   }
 
   const onClick: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -21,7 +22,9 @@ export function Trigger() {
     setEnd(time)
   }
 
-  return <>
-    <button disabled={!isInit || end !== null} onClick={onClick}>End</button>
-  </>
+  if (end !== null) {
+    return <div className={styles.done + ' button'}>Done!</div>
+  } else {
+    return <button className={styles.endButton} disabled={!isInit || end !== null} onClick={onClick}>Go!!</button>
+  }
 }

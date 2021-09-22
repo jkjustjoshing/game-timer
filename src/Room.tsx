@@ -8,7 +8,7 @@ import { WhoIsHere } from './WhoIsHere';
 import { Provider, useProvider } from './context';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import React from 'react';
-import './Room.css';
+import styles from './Room.module.css';
 
 export function Room () {
   const { roomId } = useParams<{ roomId: string }>()
@@ -29,21 +29,28 @@ function RoomContents () {
   }
 
   return (
-    <>
-      <Timer />
-      <TimeToBeat />
+    <div className={styles.wrapper}>
       <Switch>
         <Route exact path={path}>
-          <Name />
-          <Trigger />
-          <Presence room={room} />
-          <WhoIsHere room={room} />
-        </Route>
-        <Route path={`${path}/admin`}>
-          <Start />
-          <WhoIsHere room={room} admin />
+          <Name className={styles.name} />
         </Route>
       </Switch>
-    </>
+
+      <div className={styles.content}>
+        <Switch>
+          <Route exact path={path}>
+            <Trigger />
+            <Presence room={room} />
+            <WhoIsHere className={styles.competitors} room={room} />
+          </Route>
+          <Route path={`${path}/admin`}>
+            <Timer />
+            <TimeToBeat />
+            <Start />
+            <WhoIsHere className={styles.competitors} room={room} admin />
+          </Route>
+        </Switch>
+      </div>
+    </div>
   )
 }

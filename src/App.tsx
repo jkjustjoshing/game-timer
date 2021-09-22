@@ -39,7 +39,7 @@ function Home () {
   }
 
   return (
-    <form className="landing" onSubmit={onSubmit}>
+    <form className='landing' onSubmit={onSubmit}>
       <label htmlFor="name">Your Name</label>
       <Input path={useCallback(user => `users/${user.uid}/name`, [])} required id="name" />
       <label htmlFor="room">Room Code</label>

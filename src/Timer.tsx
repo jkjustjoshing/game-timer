@@ -1,43 +1,76 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useProvider } from './context'
 import { formatTime } from './formatTime'
 import { useIsHere } from './useIsHere'
-import { useRealtimeValue } from './useRealtimeValue'
+import styles from './Timer.module.css'
+import { getMinUser } from './getMinUser'
 
 export const Timer = () => {
   const { room, roomData, serverTimeOffset } = useProvider()
   const start = roomData.start ?? null
 
   const ref = useRef<HTMLDivElement>(null)
-  const [users, ends] = useIsHere(room)
-  let isRunning = true
-  if (users && ends && users.every(u => ends[u.uid])) {
-    isRunning = false
-  }
+  const users = useIsHere(room)
+
+  const minUser = getMinUser(users)
+  console.log(minUser)
+
+  const getIsRunning = useCallback(() => {
+    if (start == null) {
+      return false
+    }
+    if (!users.length || minUser) {
+      return false
+    }
+    return true
+  }, [start, minUser, users])
+
+  const getDurationToDisplay = useCallback((now: number) => {
+    if (!users.length) {
+      return null
+    }
+    if (start == null) {
+      return 0
+    }
+
+    if (!minUser) {
+      // Timer is running
+      console.log({ now, start })
+      return now - start + serverTimeOffset
+    } else {
+      // Someone pressed their buzzer
+      return minUser.end! - start
+    }
+  }, [start, minUser, users, serverTimeOffset])
 
   useEffect(() => {
-    let toRun = true
+    let isRunning = getIsRunning()
+    let rAF: number
+
     function run() {
-      if (!ref.current || !isRunning) {
+      if (!ref.current) {
         return
       }
-      if (start === null || serverTimeOffset === null || !toRun) {
-        ref.current.textContent = ''
-        return
+
+      const durationToDisplay = getDurationToDisplay(Date.now())
+      console.log({ durationToDisplay })
+      ref.current.textContent = (durationToDisplay == null ? '-' : formatTime(durationToDisplay))
+      if (getIsRunning() && isRunning) {
+        rAF = requestAnimationFrame(run)
       }
-      const time = (new Date()).getTime() + serverTimeOffset
-      const elapsed = time - start
-
-      ref.current.textContent = formatTime(elapsed)
-
-      requestAnimationFrame(run)
     }
 
     run()
 
-    return () => { toRun = false }
+    return () => {
+      cancelAnimationFrame(rAF)
+      isRunning = false
+    }
 
-  }, [start, isRunning])
+  }, [getIsRunning, getDurationToDisplay])
 
-  return <div style={{ fontVariantNumeric: 'tabular-nums' }} ref={ref} />
+  return <div>
+    <div className={styles.label}>Timer</div>
+    <div className={styles.time} style={{ fontVariantNumeric: 'tabular-nums' }} ref={ref} />
+  </div>
 }

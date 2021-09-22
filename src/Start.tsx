@@ -12,8 +12,6 @@ export function Start() {
     setStart(time + serverTimeOffset!)
   }
 
-  console.log({ isInit,isTimeInit,serverTimeOffsetIsNull: serverTimeOffset === null, startIsNotNull: start !== null, start })
-
   return <>
     <button disabled={!isInit || !isTimeInit || serverTimeOffset === null || start !== null} onClick={onClick}>Start</button>
   </>

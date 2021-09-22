@@ -1,0 +1,27 @@
+.endButton {
+  background: var(--green);
+}
+.done {
+  background: var(--yellow);
+}
+.ready {
+  background: var(--secondary-background);
+}
+
+.endButton, .done, .ready {
+  flex-grow: 1;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.endButton:before {
+  content: '';
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: block;
+  position: absolute;
+}
