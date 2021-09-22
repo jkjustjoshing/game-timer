@@ -29,9 +29,7 @@ export const useIsHere = (room: string | null) => {
     })
     onValue(endRef, r => {
       const ends = r.val()
-      if (ends) {
-        setEnds(ends)
-      }
+      setEnds(ends || {})
     })
 
     return () => {

@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth'
 import { DatabaseReference, getDatabase, off, onValue, ref, set } from 'firebase/database'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFirebaseApp, useUser } from './firebase'
 
 export const useRealtimeValue = <T extends any>(path: null | string | ((user: User) => string)) => {
@@ -11,7 +11,7 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
   const [val, setVal] = useState<T | null>(null)
   const [isInit, setIsInit] = useState(false)
 
-  const onChange = (val: T) => {
+  const onChange = (val: T | null) => {
     if (nameRef.current) {
       set(nameRef.current, val)
       setVal(val)
@@ -41,4 +41,18 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
   }, [user, path])
 
   return [isInit ? val : null, onChange, isInit] as const
+}
+
+export const useClearRealtimeValue = (path: null | string | ((user: User) => string)) => {
+  const app = useFirebaseApp()
+  const user = useUser()
+
+  return useCallback(function clear() {
+    if (!user || path === null) {
+      return
+    }
+    const database = getDatabase(app)
+    const pathRef = ref(database, typeof path === 'function' ? path(user) : path)
+    set(pathRef, {})
+  }, [])
 }

@@ -1,12 +1,13 @@
 import React from 'react'
 import { formatTime } from './formatTime';
 import { useIsHere } from './useIsHere';
-import { useRealtimeValue } from './useRealtimeValue';
+import { useRealtimeValue, useClearRealtimeValue } from './useRealtimeValue';
 
 export function WhoIsHere({ room }: { room: string }) {
   const [users, ends] = useIsHere(room)
-  const [start, , isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
+  const [start, setStart, isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
   const [, setTimeToBeat, isTTBInit] = useRealtimeValue<number>(room ? `rooms/${room}/timeToBeat` : null)
+  const clearRoomEnd = useClearRealtimeValue(room ? `rooms/${room}/end` : null)
 
   if (start === null) {
     return null
@@ -43,6 +44,8 @@ export function WhoIsHere({ room }: { room: string }) {
   const persistTimeToBeat = () => {
     if (minUser) {
       setTimeToBeat(ends[minUser.uid] - start)
+      setStart(null)
+      clearRoomEnd()
     }
   }
 
