@@ -9,9 +9,9 @@ export function WhoIsHere({ room }: { room: string }) {
   const [, setTimeToBeat, isTTBInit] = useRealtimeValue<number>(room ? `rooms/${room}/timeToBeat` : null)
   const clearRoomEnd = useClearRealtimeValue(room ? `rooms/${room}/end` : null)
 
-  if (start === null) {
-    return null
-  }
+  // if (start === null) {
+  //   return null
+  // }
 
   type U = (typeof users)[0]
   const minUser = users.reduce((u1: U | null, u2: U | null): U | null => {
@@ -42,7 +42,7 @@ export function WhoIsHere({ room }: { room: string }) {
   }, null)
 
   const persistTimeToBeat = () => {
-    if (minUser) {
+    if (minUser && start !== null) {
       setTimeToBeat(ends[minUser.uid] - start)
       setStart(null)
       clearRoomEnd()
@@ -54,7 +54,7 @@ export function WhoIsHere({ room }: { room: string }) {
       users.map((u, i) => {
         const isMin = (u === minUser)
         return <li key={i}>
-          {u.name}{ends[u.uid] ? `- ${formatTime(ends[u.uid] - start)}` : ''}
+          {u.name}{ends[u.uid] && start !== null ? `- ${formatTime(ends[u.uid] - start)}` : ''}
           {isMin && (
             <button onClick={persistTimeToBeat}>PersistTimeToBeat</button>
           )}

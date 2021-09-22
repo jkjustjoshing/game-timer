@@ -23,6 +23,8 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
       return
     }
 
+    const ppath = typeof path === 'function' ? path(user) : path
+    console.log('effecting', ppath)
     const database = getDatabase(app)
     nameRef.current = ref(database, typeof path === 'function' ? path(user) : path)
     onValue(nameRef.current, s => {
@@ -33,6 +35,7 @@ export const useRealtimeValue = <T extends any>(path: null | string | ((user: Us
     return () => {
       if (nameRef.current) {
         off(nameRef.current)
+        console.log('offValue', ppath)
         setIsInit(false)
         setVal(null)
       }

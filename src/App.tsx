@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, createContext } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth"
@@ -8,9 +8,10 @@ import { Input } from './Input';
 import { Start } from './Start';
 import { Timer } from './Timer';
 import { Trigger } from './Trigger';
-import { PersistTimeToBeat } from './PersistTimeToBeat';
+import { TimeToBeat } from './TimeToBeat';
 import { Presence } from './Presence';
 import { WhoIsHere } from './WhoIsHere';
+import { Provider } from './context';
 
 
 function App() {
@@ -20,16 +21,23 @@ function App() {
   const [room, setRoom] = useState('')
   const [timeToBeat, setTimeToBeat] = useState(0)
 
+
   return (
     <div className="App">
       <Input path={useCallback(user => `users/${user.uid}/name`, [])} placeholder="Name" />
       <input placeholder="Room" value={room} onChange={e => setRoom(e.target.value)} />
-      <Start room={room} />
-      <Timer room={room} />
-      <Trigger room={room} />
-      <Presence room={room} />
 
-      <WhoIsHere room={room} />
+      {!room ? null : (
+        <Provider room={room}>
+          <Start />
+          <Timer />
+          <TimeToBeat />
+          <Trigger room={room} />
+          <Presence room={room} />
+
+          <WhoIsHere room={room} />
+        </Provider>
+      )}
     </div>
   )
 }

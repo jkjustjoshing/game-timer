@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react'
+import { useProvider } from './context'
 import { formatTime } from './formatTime'
 import { useIsHere } from './useIsHere'
 import { useRealtimeValue } from './useRealtimeValue'
 
-export const Timer = ({ room }: { room: string }) => {
+export const Timer = () => {
+  const { room, roomData, serverTimeOffset } = useProvider()
+  const start = roomData.start ?? null
+
   const ref = useRef<HTMLDivElement>(null)
-  const [start, setStart, isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
-  const [offset] = useRealtimeValue<number>('/.info/serverTimeOffset')
   const [users, ends] = useIsHere(room)
   let isRunning = true
   if (users && ends && users.every(u => ends[u.uid])) {
@@ -19,11 +21,11 @@ export const Timer = ({ room }: { room: string }) => {
       if (!ref.current || !isRunning) {
         return
       }
-      if (start === null || offset === null || !toRun) {
+      if (start === null || serverTimeOffset === null || !toRun) {
         ref.current.textContent = ''
         return
       }
-      const time = (new Date()).getTime() + offset
+      const time = (new Date()).getTime() + serverTimeOffset
       const elapsed = time - start
 
       ref.current.textContent = formatTime(elapsed)
