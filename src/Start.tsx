@@ -10,18 +10,27 @@ export function Start() {
   const { room } = useProvider()
   const [start, setStart, isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
   const [serverTimeOffset, , isTimeInit] = useRealtimeValue<number>('/.info/serverTimeOffset')
+  const clearRoomEnd = useClearRealtimeValue(room ? `rooms/${room}/end` : null)
 
-  const onClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onStart = () => {
     const time = (new Date()).getTime()
     setStart(time + serverTimeOffset!)
   }
+  const onWhoops = () => {
+    setStart(null)
+    clearRoomEnd()
+  }
 
-  if (!isInit || !isTimeInit || serverTimeOffset === null || start !== null) {
+  if (!isInit || !isTimeInit || serverTimeOffset === null) {
     return null
   }
 
+  if (start !== null) {
+    return <button onClick={onWhoops} className={styles.whoops}>Whoops, start over</button>
+  }
+
   return <button
-    onClick={onClick}
+    onClick={onStart}
     className={styles.start}
   >Start</button>
 }
@@ -37,7 +46,7 @@ export function PersistTimeToBeat() {
   const minUser = getMinUser(users)
 
   if (!minUser || start === null) {
-    return null
+    return <div className={styles.fill} />
   }
 
   const ttb = minUser.end! - start

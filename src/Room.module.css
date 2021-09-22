@@ -20,6 +20,11 @@
 .bottom {
   margin-top: auto;
 }
+
+.competitors {
+  margin-top: 20px;
+}
+
 .competitors h2 {
   font-size: 1em;
   margin: 0;
@@ -29,4 +34,10 @@
   padding: 0;
   margin-left: 30px;
   font-size: 0.8em;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }

@@ -1,8 +1,16 @@
-.start, .persist {
+.start, .persist, .whoops, .fill {
   height: 200px;
-  margin-bottom: 20px;
+  flex-grow: 4;
+}
+
+.start {
   background: var(--green);
 }
 .persist {
   background: var(--yellow);
+}
+.whoops {
+  flex-grow: 1;
+  flex-basis: 20%;
+  background: var(--tertiary);
 }

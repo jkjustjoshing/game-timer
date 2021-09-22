@@ -25,6 +25,9 @@ export function Trigger() {
   if (end !== null) {
     return <div className={styles.done + ' button'}>Done!</div>
   } else {
-    return <button className={styles.endButton} disabled={!isInit || end !== null} onClick={onClick}>Go!!</button>
+    return <button className={styles.endButton} disabled={!isInit || end !== null} onClick={onClick}>
+      <div className={styles.go}>Go!</div>
+      <div className={styles.message}>Time is ticking, tap anywhere when you're done!</div>
+    </button>
   }
 }

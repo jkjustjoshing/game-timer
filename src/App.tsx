@@ -41,9 +41,9 @@ function Home () {
   return (
     <form className='landing' onSubmit={onSubmit}>
       <label htmlFor="name">Your Name</label>
-      <Input path={useCallback(user => `users/${user.uid}/name`, [])} required id="name" />
+      <Input path={useCallback(user => `users/${user.uid}/name`, [])} required id="name" autoFocus />
       <label htmlFor="room">Room Code</label>
-      <input name='room' required id="room" />
+      <input name='room' required id="room" autoCapitalize="off" autoComplete="off" autoCorrect="off"  />
       <button type="submit">Submit</button>
     </form>
   )

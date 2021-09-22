@@ -1,5 +1,7 @@
 .endButton {
   background: var(--green);
+  display: flex;
+  flex-direction: column;
 }
 .done {
   background: var(--yellow);
@@ -24,4 +26,12 @@
   left: 0;
   display: block;
   position: absolute;
+}
+
+.go {
+  font-size: 7vw;
+}
+.message {
+  font-size: 4vw;
+  margin-top: 4vh;
 }

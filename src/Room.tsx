@@ -21,17 +21,17 @@ export function Room () {
 
 function RoomContents () {
   const { room, name } = useProvider()
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
-  if (!room || !name) {
-    return <Redirect to='..' />
-  }
 
   return (
     <div className={styles.wrapper}>
       <Switch>
         <Route exact path={path}>
-          <Name className={styles.name} />
+          {(!room || !name)
+           ? <Redirect to='..' />
+           : <Name className={styles.name} />
+          }
         </Route>
       </Switch>
 
@@ -45,8 +45,10 @@ function RoomContents () {
           <Route path={`${path}/admin`}>
             <Timer />
             <div className={styles.bottom}>
-              <Start />
-              <PersistTimeToBeat />
+              <div className={styles.buttons}>
+                <Start />
+                <PersistTimeToBeat />
+              </div>
               <WhoIsHere className={styles.competitors} />
             </div>
           </Route>
