@@ -8,6 +8,7 @@ import { getMinUser } from './getMinUser'
 export const Timer = () => {
   const { room, roomData, serverTimeOffset } = useProvider()
   const start = roomData.start ?? null
+  const timeToBeat = roomData.timeToBeat ?? null
 
   const ref = useRef<HTMLDivElement>(null)
   const users = useIsHere(room)
@@ -71,6 +72,10 @@ export const Timer = () => {
 
   return <div>
     <div className={styles.label}>Timer</div>
-    <div className={styles.time} style={{ fontVariantNumeric: 'tabular-nums' }} ref={ref} />
+    <div className={styles.time} ref={ref} />
+    {timeToBeat != null && <div className={styles.timeToBeat}>
+      <div>Time to beat</div>
+      <div>{formatTime(timeToBeat)}</div>
+    </div>}
   </div>
 }

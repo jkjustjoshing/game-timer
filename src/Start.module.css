@@ -1,0 +1,8 @@
+.start, .persist {
+  height: 200px;
+  margin-bottom: 20px;
+  background: var(--green);
+}
+.persist {
+  background: var(--yellow);
+}

@@ -1,29 +1,12 @@
 import React from 'react'
+import { useProvider } from './context';
 import { formatTime } from './formatTime';
-import { getMinUser } from './getMinUser';
 import { useIsHere } from './useIsHere';
-import { useRealtimeValue, useClearRealtimeValue } from './useRealtimeValue';
 
-export function WhoIsHere({ room, admin, className }: { room: string, admin?: boolean, className: string }) {
+export function WhoIsHere({ className }: { className?: string }) {
+  const { room, roomData } = useProvider()
+  const start = roomData?.start ?? null
   const users = useIsHere(room)
-  const [start, setStart, isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
-  const [, setTimeToBeat, isTTBInit] = useRealtimeValue<number>(room ? `rooms/${room}/timeToBeat` : null)
-  const clearRoomEnd = useClearRealtimeValue(room ? `rooms/${room}/end` : null)
-
-  // if (start === null) {
-  //   return null
-  // }
-
-  type U = (typeof users)[0]
-  const minUser = getMinUser(users)
-
-  const persistTimeToBeat = () => {
-    if (minUser && minUser.end !== null && start !== null) {
-      setTimeToBeat(minUser.end - start)
-      setStart(null)
-      clearRoomEnd()
-    }
-  }
 
   const sortedUsers = [...users].sort((a, b) => {
     const aEnd = a.end
@@ -46,7 +29,6 @@ export function WhoIsHere({ room, admin, className }: { room: string, admin?: bo
     <ul>
       {
         sortedUsers.map((u, i) => {
-          const isMin = (u === minUser)
           return <li key={i}>
             {u.name}
             {u.end && start !== null ? (
@@ -54,9 +36,6 @@ export function WhoIsHere({ room, admin, className }: { room: string, admin?: bo
               )
               : ''
             }
-            {isMin && admin && (
-              <button onClick={persistTimeToBeat}>PersistTimeToBeat</button>
-            )}
           </li>
         })
       }

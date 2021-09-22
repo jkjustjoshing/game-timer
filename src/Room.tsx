@@ -1,8 +1,7 @@
 import { Name } from './Name';
-import { Start } from './Start';
+import { PersistTimeToBeat, Start } from './Start';
 import { Timer } from './Timer';
 import { Trigger } from './Trigger';
-import { TimeToBeat } from './TimeToBeat';
 import { Presence } from './Presence';
 import { WhoIsHere } from './WhoIsHere';
 import { Provider, useProvider } from './context';
@@ -41,13 +40,15 @@ function RoomContents () {
           <Route exact path={path}>
             <Trigger />
             <Presence room={room} />
-            <WhoIsHere className={styles.competitors} room={room} />
+            <WhoIsHere className={styles.competitors + ' ' + styles.bottom} />
           </Route>
           <Route path={`${path}/admin`}>
             <Timer />
-            <TimeToBeat />
-            <Start />
-            <WhoIsHere className={styles.competitors} room={room} admin />
+            <div className={styles.bottom}>
+              <Start />
+              <PersistTimeToBeat />
+              <WhoIsHere className={styles.competitors} />
+            </div>
           </Route>
         </Switch>
       </div>

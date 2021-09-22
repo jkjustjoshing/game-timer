@@ -1,6 +1,12 @@
-.label {
-  color: red;
+.label, .time, .timeToBeat {
+  text-align: center;
 }
 .time {
-  color: blue;
+  font-size: 20vw;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeToBeat {
+  font-size: 4vw;
+  margin-top: 15px;
 }
