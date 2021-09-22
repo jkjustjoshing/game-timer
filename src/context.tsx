@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useContext, useEffect, useMemo } from 'react'
+import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo } from 'react'
 import { useRealtimeValue } from './useRealtimeValue'
 
 type Room = {
@@ -10,6 +10,7 @@ type Room = {
 
 type Context = {
   room: string,
+  name: string
   serverTimeOffset: number,
   roomData: Room
 }
@@ -18,26 +19,25 @@ const context = createContext<null | Context>(null)
 
 export const Provider = ({ room, children }: PropsWithChildren<{ room: string }>) => {
   const [roomData, setRoomData, isInit] = useRealtimeValue<Room>(`rooms/${room}`)
-  const [serverTimeOffset] = useRealtimeValue<number>('/.info/serverTimeOffset')
 
-  useEffect(() => {
-    if (isInit && !roomData) {
-      setRoomData({})
-    }
-  }, [isInit, roomData, setRoomData])
+  const namePath = useCallback(user => {
+    return `users/${user.uid}/name`
+  }, [])
+  const [name, , isNameInit] = useRealtimeValue<string>(namePath)
+
+  const [serverTimeOffset, , isOffsetInit] = useRealtimeValue<number>('/.info/serverTimeOffset')
 
   const contextVal = useMemo(() => {
-    console.log(isInit, serverTimeOffset)
-    if (!isInit || serverTimeOffset === null) {
+    if (!isInit || !isOffsetInit || !isNameInit) {
       return null
     }
     return {
       room,
+      name: name || '',
       roomData: roomData || {},
-      serverTimeOffset
+      serverTimeOffset: serverTimeOffset || 0
     }
-  }, [room, roomData, serverTimeOffset])
-
+  }, [room, roomData, serverTimeOffset, name, isInit, isOffsetInit, isNameInit])
 
   if (contextVal === null) {
     return null
