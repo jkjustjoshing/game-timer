@@ -6,7 +6,7 @@ import { TimeToBeat } from './TimeToBeat';
 import { Presence } from './Presence';
 import { WhoIsHere } from './WhoIsHere';
 import { Provider, useProvider } from './context';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import React from 'react';
 import './Room.css';
 
@@ -22,18 +22,28 @@ export function Room () {
 
 function RoomContents () {
   const { room, name } = useProvider()
+  let { path, url } = useRouteMatch();
+
   if (!room || !name) {
     return <Redirect to='..' />
   }
 
-  return <>
-    <Name />
-    <Start />
-    <Timer />
-    <TimeToBeat />
-    <Trigger />
-    <Presence room={room} />
-
-    <WhoIsHere room={room} />
-  </>
+  return (
+    <>
+      <Timer />
+      <TimeToBeat />
+      <Switch>
+        <Route exact path={path}>
+          <Name />
+          <Trigger />
+          <Presence room={room} />
+          <WhoIsHere room={room} />
+        </Route>
+        <Route path={`${path}/admin`}>
+          <Start />
+          <WhoIsHere room={room} admin />
+        </Route>
+      </Switch>
+    </>
+  )
 }

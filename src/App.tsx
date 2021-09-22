@@ -18,7 +18,7 @@ function App() {
         <Route path="/:roomId">
           <Room />
         </Route>
-        <Route path="/">
+        <Route exact path="/">
           <Home />
         </Route>
       </Switch>

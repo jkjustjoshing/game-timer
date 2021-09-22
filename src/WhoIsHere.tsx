@@ -3,7 +3,7 @@ import { formatTime } from './formatTime';
 import { useIsHere } from './useIsHere';
 import { useRealtimeValue, useClearRealtimeValue } from './useRealtimeValue';
 
-export function WhoIsHere({ room }: { room: string }) {
+export function WhoIsHere({ room, admin }: { room: string, admin?: boolean }) {
   const [users, ends] = useIsHere(room)
   const [start, setStart, isInit] = useRealtimeValue<number>(room ? `rooms/${room}/start` : null)
   const [, setTimeToBeat, isTTBInit] = useRealtimeValue<number>(room ? `rooms/${room}/timeToBeat` : null)
@@ -55,7 +55,7 @@ export function WhoIsHere({ room }: { room: string }) {
         const isMin = (u === minUser)
         return <li key={i}>
           {u.name}{ends[u.uid] && start !== null ? `- ${formatTime(ends[u.uid] - start)}` : ''}
-          {isMin && (
+          {isMin && admin && (
             <button onClick={persistTimeToBeat}>PersistTimeToBeat</button>
           )}
         </li>
