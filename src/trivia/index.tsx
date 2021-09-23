@@ -57,15 +57,27 @@ const Index = () => {
 import styles from './Items.module.css'
 
 export const Game = <T extends { name: string }>({ items, playerCount }: { items: T[], playerCount: number }) => {
-  return <div className={styles.wrapper}>
+  const cellCount = playerCount // + 1
+  const [names, setNames] = useState<string[]>(new Array(playerCount).fill(''))
+
+  return <div className={styles.wrapper} style={{ gridTemplateColumns: `repeat(${Math.ceil(cellCount / 2)}, 1fr)` }}>
     {
       new Array(playerCount).fill(null).map((_,i) => (
-        <div key={i} style={{ height: `calc(${100 / Math.ceil(playerCount / 2) + 'vh'} - 10px)` }} className={styles.singleGame}>
-          <input placeholder="Player name" className={styles.name} />
+        <div key={i} className={styles.singleGame}>
+          <input placeholder="Player name" className={styles.name} value={names[i]} onChange={e => {
+            setNames(n => {
+              let newNames = [...n]
+              newNames[i] = e.target.value
+              return newNames
+            })
+          }} />
           <SingleGame items={items} />
         </div>
       ))
     }
+    {/* <div style={{ height: `calc(${100 / Math.ceil(cellCount / 2) + 'vh'} - 10px)` }} className={styles.singleGame}>
+      Questions:
+    </div> */}
   </div>
 }
 
