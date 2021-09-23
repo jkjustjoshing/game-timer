@@ -1,0 +1,50 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 5px solid var(--border);
+  border-left: 5px solid var(--border);
+}
+
+.singleGame {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 5px solid var(--border);
+  border-right: 5px solid var(--border);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  width: 100%;
+  flex-grow: 1
+}
+
+.list li {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+}
+
+.button {
+  height: 100%;
+  background: var(--cta-background);
+  color: var(--cta-text);
+  border-radius: 0;
+  font-size: 20px;
+}
+
+.name {
+  width: 100%;
+  display: block;
+  font-size: 15px;
+  text-align: center;
+  border: none;
+  padding: 5px;
+}

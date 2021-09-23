@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import { Input } from './Input';
 import { Room } from './Room';
+import { Trivia } from './trivia';
 
 
 function App() {
@@ -15,6 +16,9 @@ function App() {
   return (
     <Router>
       <Switch>
+        <Route path='/trivia'>
+          <Trivia />
+        </Route>
         <Route path="/:roomId">
           <Room />
         </Route>

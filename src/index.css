@@ -17,6 +17,8 @@ body {
   --yellow: #CACA00;
   --red: #FD696D;
   --green: green;
+
+  --border: var(--green);
 }
 
 * {

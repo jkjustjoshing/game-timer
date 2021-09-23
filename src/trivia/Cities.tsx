@@ -1,0 +1,23 @@
+export const items = [
+  { name: 'Paris', capitalCity: true, femaleMayor: true, population: 2170000, elevationFeet: 256,	flagHasBlue: true },
+  { name: 'New York', capitalCity: false, femaleMayor: false, population: 8800000, elevationFeet: 33,	flagHasBlue: true },
+  { name: 'Rio de Janiero', capitalCity: false, femaleMayor: false, population: 6750000, elevationFeet: 7,	flagHasBlue: true },
+  { name: 'Tokyo', capitalCity: false, femaleMayor: true, population: 13960000, elevationFeet: 131,flagHasBlue: false },
+  { name: 'Shanghai', capitalCity: false, femaleMayor: false, population: 24870000, elevationFeet: 13,	flagHasBlue: true },
+  { name: 'Cairo', capitalCity: true, femaleMayor: false, population: 1540000, elevationFeet: 75,	flagHasBlue: true },
+  { name: 'Delhi', capitalCity: true, femaleMayor: false, population: 16790000, elevationFeet: 820,flagHasBlue: false },
+  { name: 'Los Angeles', capitalCity: false, femaleMayor: false, population: 3900000, elevationFeet: 305,flagHasBlue: false },
+  { name: 'Washington DC', capitalCity: true, femaleMayor: true, population: 690000, elevationFeet: 150,flagHasBlue: false },
+  { name: 'Frankfurt', capitalCity: false, femaleMayor: false, population: 764000, elevationFeet: 367,flagHasBlue: false },
+  { name: 'Stockholm', capitalCity: true, femaleMayor: true, population: 976000, elevationFeet: 92,	flagHasBlue: true },
+  { name: 'London', capitalCity: true, femaleMayor: false, population: 8960000, elevationFeet: 36,flagHasBlue: false },
+  { name: 'Florence', capitalCity: false, femaleMayor: false, population: 383000, elevationFeet: 160,flagHasBlue: false },
+  { name: 'Bratislava', capitalCity: true, femaleMayor: false, population: 440000, elevationFeet: 440,flagHasBlue: false },
+  { name: 'Nairobi', capitalCity: true, femaleMayor: true, population: 4400000, elevationFeet: 5889,	flagHasBlue: true },
+  { name: 'Cape Town', capitalCity: false, femaleMayor: false, population: 3740000, elevationFeet: 5217,	flagHasBlue: true },
+  { name: 'Vancouver', capitalCity: false, femaleMayor: false, population: 631000, elevationFeet: 501,	flagHasBlue: true },
+  { name: 'Melbourne', capitalCity: false, femaleMayor: false, population: 5160000, elevationFeet: 102,	flagHasBlue: true },
+  { name: 'Budapest', capitalCity: true, femaleMayor: false, population: 1750000, elevationFeet: 1022, flagHasBlue: false },
+  { name: 'Krakow', capitalCity: false, femaleMayor: false, population: 779000, elevationFeet: 719,	flagHasBlue: true },
+  { name: 'Barcelona', capitalCity: false, femaleMayor: true, population: 1620000, elevationFeet: 39,flagHasBlue: false }
+]
