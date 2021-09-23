@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import { Link, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
-import { items as celebrities } from './Celebrities'
-import { items as movies } from './Movies'
-import { items as cities } from './Cities'
-import { Presidents } from './Presidents'
-import { items as countries } from './Countries'
+import * as data from './data'
 
 export const Trivia = () => {
   let { path } = useRouteMatch<{ playerCount: string }>();
@@ -15,22 +11,14 @@ export const Trivia = () => {
   return (
     <>
       <Switch>
-        <Route path={`${path}/celebrities`}>
-          <Game items={celebrities} playerCount={playerCount} />
-        </Route>
-        <Route path={`${path}/movies`}>
-          <Game items={movies} playerCount={playerCount} />
-        </Route>
-        <Route path={`${path}/cities`}>
-          <Game items={cities} playerCount={playerCount} />
-        </Route>
-        <Route path={`${path}/presidents`}>
-          <Presidents />
-        </Route>
-        <Route path={`${path}/countries`}>
-          <Game items={countries} playerCount={playerCount} />
-        </Route>
-          <Index />
+        {
+          (Object.keys(data) as (keyof typeof data)[]).map((key) => (
+            <Route key={key} path={`${path}/${key}` as string}>
+              <Game items={data[key] as any} playerCount={playerCount} />
+            </Route>
+          ))
+        }
+        <Index />
       </Switch>
     </>
   )
@@ -38,14 +26,22 @@ export const Trivia = () => {
 
 const Index = () => {
   let { path } = useRouteMatch();
-  const [playerCount, setPlayerCount] = useState(0)
+  const [playerCount, setPlayerCount] = useState(1)
 
   return (
     <>
-      <input placeholder="Number of players" type="number" value={playerCount} onChange={(e) => setPlayerCount(Number(e.target.value))} />
+      <label htmlFor='playerCount'>Number of players</label>
+      <input
+        id='playerCount'
+        style={{ fontSize: 30 }}
+        placeholder="Number of players"
+        type="number"
+        value={playerCount}
+        onChange={(e) => setPlayerCount(Number(e.target.value))}
+      />
       <ul>
         {
-          ['celebrities', 'movies', 'cities', 'presidents', 'countries'].map(l => (
+          Object.keys(data).map(l => (
             <li key={l}><Link to={`${path}/${l}?playerCount=${playerCount}`}>{l}</Link></li>
           ))
         }
@@ -59,7 +55,7 @@ import styles from './Items.module.css'
 export const Game = <T extends { name: string }>({ items, playerCount }: { items: T[], playerCount: number }) => {
   const cellCount = playerCount // + 1
   const [names, setNames] = useState<string[]>(new Array(playerCount).fill(''))
-
+  console.log(items)
   return <div className={styles.wrapper} style={{ gridTemplateColumns: `repeat(${Math.ceil(cellCount / 2)}, 1fr)` }}>
     {
       new Array(playerCount).fill(null).map((_,i) => (
