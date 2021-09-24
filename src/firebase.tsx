@@ -30,7 +30,7 @@ export function FirebaseProvider({ children }: PropsWithChildren<{}>) {
   const [app] = useState(() => getApp())
 
   useEffect(() => {
-    signInAnonymously(getAuth(app)).catch(() => { setError(true) })
+    signInAnonymously(getAuth(app)).catch((e) => { console.log(e); setError(true) })
   }, [])
 
   useEffect(() => {
