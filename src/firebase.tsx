@@ -9,7 +9,7 @@ import React, { createContext, useContext, useState, useEffect, PropsWithChildre
 export const getApp = () => {
   const firebaseConfig = {
     apiKey: "AIzaSyBYIHGRUizgUmHIh_FNdOk23JOtdOuVUJU",
-    authDomain: "game-timer-64b5c.firebaseapp.com",
+    authDomain: "timer.kramer.run",
     projectId: "game-timer-64b5c",
     storageBucket: "game-timer-64b5c.appspot.com",
     messagingSenderId: "608013255432",
