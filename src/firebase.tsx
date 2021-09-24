@@ -40,6 +40,7 @@ export function FirebaseProvider({ children }: PropsWithChildren<{}>) {
   }, [])
 
   if (error) {
+    console.log(error)
     return <div>Error connecting to server</div>
   }
 
